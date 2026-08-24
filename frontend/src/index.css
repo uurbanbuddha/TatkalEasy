@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-blue-900 via-purple-900 to-blue-800 min-h-screen text-white;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-tatkal-orange to-orange-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300;
+  }
+
+  .btn-secondary {
+    @apply glass-card px-6 py-3 rounded-xl font-semibold hover:bg-white/20 transition-all duration-300;
+  }
+
+  .input-field {
+    @apply glass-card px-6 py-4 rounded-xl w-full outline-none focus:ring-2 focus:ring-tatkal-orange transition-all;
+  }
+
+  .train-card {
+    @apply glass-card p-6 hover:scale-105 transition-all duration-300 cursor-pointer;
+  }
+
+  .seat {
+    @apply w-12 h-12 rounded-lg flex items-center justify-center font-bold text-sm transition-all duration-200 cursor-pointer;
+  }
+
+  .seat-available {
+    @apply bg-green-500 hover:bg-green-400 hover:scale-110;
+  }
+
+  .seat-booked {
+    @apply bg-red-500 cursor-not-allowed opacity-50;
+  }
+
+  .seat-selected {
+    @apply bg-yellow-500 animate-pulse ring-4 ring-yellow-300;
+  }
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Confetti animation */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  animation: confetti-fall 3s ease-in infinite;
+}
