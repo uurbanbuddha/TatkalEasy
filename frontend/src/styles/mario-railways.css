@@ -1,0 +1,557 @@
+/* MARIO-STYLE GAMING EXPERIENCE FOR INDIAN RAILWAYS */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  --mario-red: #E52521;
+  --mario-blue: #049CD8;
+  --mario-yellow: #FBD000;
+  --mario-green: #43B047;
+  --mario-orange: #F7931E;
+  --coin-gold: #FFD700;
+  --block-brown: #8B4513;
+  --sky-blue: #5C94FC;
+  --ground-brown: #CA8E68;
+}
+
+/* Pixel font for everything */
+body {
+  font-family: 'Press Start 2P', cursive;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Mario-style pixelated background */
+.mario-world {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: var(--sky-blue);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 40px,
+      rgba(255, 255, 255, 0.1) 40px,
+      rgba(255, 255, 255, 0.1) 41px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 40px,
+      rgba(255, 255, 255, 0.1) 40px,
+      rgba(255, 255, 255, 0.1) 41px
+    );
+}
+
+/* Pixelated clouds (Mario style) */
+.pixel-cloud {
+  position: fixed;
+  background: white;
+  width: 80px;
+  height: 20px;
+  border-radius: 0;
+  animation: float-pixel linear infinite;
+  z-index: -1;
+  box-shadow:
+    0 0 0 4px white,
+    20px 0 0 4px white,
+    40px 0 0 4px white;
+}
+
+@keyframes float-pixel {
+  0% { left: -100px; }
+  100% { left: 100vw; }
+}
+
+/* Pixelated ground blocks */
+.ground-blocks {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  z-index: -1;
+  background: var(--ground-brown);
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      var(--block-brown),
+      var(--block-brown) 40px,
+      var(--ground-brown) 40px,
+      var(--ground-brown) 80px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 40px,
+      rgba(0, 0, 0, 0.2) 40px,
+      rgba(0, 0, 0, 0.2) 42px
+    );
+  box-shadow: 0 -4px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Animated train (jumping like Mario!) */
+.train-mario {
+  position: fixed;
+  bottom: 100px;
+  font-size: 60px;
+  animation: train-jump 3s ease-in-out infinite;
+  z-index: 10;
+  filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, 0.5));
+}
+
+@keyframes train-jump {
+  0%, 100% {
+    bottom: 100px;
+    left: 10%;
+  }
+  25% {
+    bottom: 200px;
+    left: 30%;
+  }
+  50% {
+    bottom: 100px;
+    left: 50%;
+  }
+  75% {
+    bottom: 200px;
+    left: 70%;
+  }
+}
+
+/* Floating coins */
+.coin-float {
+  position: fixed;
+  font-size: 32px;
+  animation: coin-spin 1s linear infinite, coin-float-up 2s ease-out forwards;
+  z-index: 100;
+  pointer-events: none;
+}
+
+@keyframes coin-spin {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(0.2); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes coin-float-up {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-200px);
+    opacity: 0;
+  }
+}
+
+/* Score display (Mario style) */
+.score-display {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 16px 24px;
+  border: 4px solid white;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Power-up block button (Question block style!) */
+.power-block {
+  background: var(--mario-yellow);
+  border: 4px solid var(--block-brown);
+  padding: 20px 40px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 18px;
+  color: white;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  position: relative;
+  box-shadow:
+    inset -4px -4px 0 rgba(0, 0, 0, 0.3),
+    8px 8px 0 rgba(0, 0, 0, 0.5);
+  transition: all 0.1s;
+  animation: block-bounce 0.5s ease-in-out infinite;
+}
+
+@keyframes block-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.power-block:hover {
+  animation: block-hit 0.3s ease-out;
+  transform: translateY(-12px);
+}
+
+.power-block:active {
+  transform: translateY(4px);
+  box-shadow:
+    inset -4px -4px 0 rgba(0, 0, 0, 0.3),
+    4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+@keyframes block-hit {
+  0%, 100% { transform: translateY(0); }
+  20% { transform: translateY(-20px); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-15px); }
+  80% { transform: translateY(-5px); }
+}
+
+/* Coin counter animation */
+.coin-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  animation: coin-bounce 0.5s ease-in-out;
+}
+
+@keyframes coin-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+/* Game-like progress bar (Mario health bar style) */
+.game-progress {
+  height: 32px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 4px solid white;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: visible;
+}
+
+.game-progress-fill {
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    var(--mario-green) 0%,
+    var(--mario-green) 45%,
+    #2d7a31 55%,
+    #2d7a31 100%
+  );
+  border-right: 4px solid rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: progress-pulse 0.5s ease-out;
+  box-shadow: inset 0 -8px 0 rgba(0, 0, 0, 0.2);
+}
+
+@keyframes progress-pulse {
+  0% { width: 0; }
+}
+
+.game-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Card with pixel art border */
+.pixel-card {
+  background: white;
+  border: 8px solid black;
+  box-shadow:
+    0 0 0 4px white,
+    8px 8px 0 black;
+  position: relative;
+  padding: 32px;
+}
+
+.pixel-card::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 2px dashed rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+/* Train ticket (looks like Mario item card) */
+.ticket-pixel {
+  background: var(--mario-yellow);
+  border: 8px solid black;
+  padding: 24px;
+  position: relative;
+  box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.5);
+}
+
+.ticket-pixel::before {
+  content: '★';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 40px;
+  animation: star-spin 2s linear infinite;
+}
+
+@keyframes star-spin {
+  0% { transform: translateX(-50%) rotate(0deg); }
+  100% { transform: translateX(-50%) rotate(360deg); }
+}
+
+/* Seat buttons (like Mario blocks) */
+.seat-block {
+  width: 60px;
+  height: 60px;
+  border: 4px solid black;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.1s;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.seat-block.available {
+  background: var(--mario-green);
+  color: white;
+}
+
+.seat-block.available:hover {
+  animation: seat-bounce 0.3s ease-out;
+  transform: translateY(-8px);
+}
+
+@keyframes seat-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.seat-block.selected {
+  background: var(--coin-gold);
+  color: black;
+  animation: seat-glow 0.5s ease-in-out infinite;
+}
+
+@keyframes seat-glow {
+  0%, 100% {
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow:
+      4px 4px 0 rgba(0, 0, 0, 0.5),
+      0 0 20px var(--coin-gold);
+  }
+}
+
+.seat-block.booked {
+  background: var(--mario-red);
+  color: white;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Station board (like Mario sign) */
+.station-board-pixel {
+  background: var(--mario-yellow);
+  border: 8px solid black;
+  padding: 24px 48px;
+  position: relative;
+  box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.5);
+  color: black;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+}
+
+.station-board-pixel::before,
+.station-board-pixel::after {
+  content: '';
+  position: absolute;
+  top: -16px;
+  width: 16px;
+  height: 16px;
+  background: var(--block-brown);
+  border: 4px solid black;
+}
+
+.station-board-pixel::before {
+  left: 20%;
+}
+
+.station-board-pixel::after {
+  right: 20%;
+}
+
+/* Input fields (pixel style) */
+.input-pixel {
+  background: white;
+  border: 4px solid black;
+  padding: 16px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  box-shadow: inset 4px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.input-pixel:focus {
+  outline: none;
+  box-shadow:
+    inset 4px 4px 0 rgba(0, 0, 0, 0.1),
+    0 0 0 4px var(--mario-yellow);
+}
+
+/* Nav bar (game HUD style) */
+.game-nav {
+  background: rgba(0, 0, 0, 0.9);
+  border-bottom: 4px solid white;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Train cards (like Mario level cards) */
+.train-card-pixel {
+  background: linear-gradient(180deg, #4a90e2 0%, #2e5c8a 100%);
+  border: 8px solid black;
+  padding: 24px;
+  position: relative;
+  box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.5);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.train-card-pixel:hover {
+  transform: translateY(-8px);
+  box-shadow: 16px 16px 0 rgba(0, 0, 0, 0.5);
+}
+
+.train-card-pixel::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+
+/* Points popup */
+.points-popup {
+  position: fixed;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 24px;
+  color: var(--coin-gold);
+  text-shadow:
+    2px 2px 0 black,
+    -2px -2px 0 black,
+    2px -2px 0 black,
+    -2px 2px 0 black;
+  animation: points-rise 2s ease-out forwards;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+@keyframes points-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-150px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Level complete screen */
+.level-complete {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.level-complete-content {
+  text-align: center;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.level-complete-title {
+  font-size: 48px;
+  color: var(--coin-gold);
+  text-shadow:
+    4px 4px 0 black,
+    -2px -2px 0 black;
+  margin-bottom: 32px;
+  animation: bounce-in 0.5s ease-out;
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Fireworks for celebration */
+.firework {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  animation: firework-explode 1s ease-out forwards;
+  z-index: 2001;
+}
+
+@keyframes firework-explode {
+  0% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y));
+    opacity: 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .train-mario {
+    font-size: 40px;
+  }
+
+  .power-block {
+    padding: 16px 32px;
+    font-size: 14px;
+  }
+
+  .score-display {
+    font-size: 12px;
+    padding: 12px 16px;
+  }
+
+  .station-board-pixel {
+    padding: 16px 24px;
+    font-size: 14px;
+  }
+}
