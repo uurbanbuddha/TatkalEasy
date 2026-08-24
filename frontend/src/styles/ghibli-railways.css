@@ -1,0 +1,461 @@
+/* GHIBLI-STYLE INDIAN RAILWAYS AESTHETIC */
+
+/* Ghibli-inspired color palette with Indian Railways */
+:root {
+  /* Ghibli warm sunset colors */
+  --ghibli-sky-morning: #87CEEB;
+  --ghibli-sky-sunset: #FF7E5F;
+  --ghibli-sky-dusk: #FEB47B;
+  --ghibli-grass: #7FB069;
+  --ghibli-earth: #D4A373;
+
+  /* Indian Railways colors */
+  --ir-yellow: #FDB913;
+  --ir-blue: #003087;
+  --ir-cream: #F5E6D3;
+  --ir-green: #2D5F3F;
+
+  /* Bollywood pop culture */
+  --bollywood-orange: #FF6B35;
+  --bollywood-pink: #FF006E;
+  --bollywood-gold: #FFD700;
+  --chai-brown: #8B4513;
+}
+
+/* Ghibli-style animated sky background */
+.ghibli-sky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    #87CEEB 0%,
+    #FEB47B 50%,
+    #FF7E5F 100%
+  );
+  animation: sky-shift 20s ease-in-out infinite;
+}
+
+@keyframes sky-shift {
+  0%, 100% {
+    background: linear-gradient(180deg, #87CEEB 0%, #FEB47B 50%, #FF7E5F 100%);
+  }
+  50% {
+    background: linear-gradient(180deg, #FEB47B 0%, #FF7E5F 50%, #5B3A70 100%);
+  }
+}
+
+/* Floating clouds - Ghibli style */
+.ghibli-cloud {
+  position: fixed;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 100px;
+  animation: float-cloud linear infinite;
+  z-index: -1;
+  filter: blur(1px);
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes float-cloud {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
+}
+
+/* Railway tracks pattern - subtle */
+.railway-pattern {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  z-index: -1;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 80px,
+      rgba(139, 69, 19, 0.2) 80px,
+      rgba(139, 69, 19, 0.2) 85px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 18px,
+      rgba(139, 69, 19, 0.15) 18px,
+      rgba(139, 69, 19, 0.15) 20px
+    );
+  opacity: 0.4;
+}
+
+/* Indian Railway station platform */
+.platform-strip {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(180deg, transparent 0%, rgba(164, 116, 73, 0.6) 100%);
+  z-index: -1;
+}
+
+/* Ghibli-style train silhouette */
+.train-silhouette {
+  position: fixed;
+  bottom: 80px;
+  font-size: 120px;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+  animation: train-pass 25s linear infinite;
+  z-index: -1;
+}
+
+@keyframes train-pass {
+  0% {
+    left: -200px;
+    transform: scaleX(1);
+  }
+  45% {
+    left: 50%;
+  }
+  50% {
+    left: 50%;
+    transform: scaleX(1) rotateY(0deg);
+  }
+  51% {
+    transform: scaleX(-1) rotateY(180deg);
+  }
+  100% {
+    left: calc(100% + 200px);
+    transform: scaleX(-1) rotateY(180deg);
+  }
+}
+
+/* Indian pop culture - colorful hanging decorations */
+.decoration-string {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  z-index: -1;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 40px,
+      var(--bollywood-orange) 40px,
+      var(--bollywood-orange) 43px,
+      transparent 43px,
+      transparent 80px,
+      var(--bollywood-pink) 80px,
+      var(--bollywood-pink) 83px,
+      transparent 83px,
+      transparent 120px,
+      var(--bollywood-gold) 120px,
+      var(--bollywood-gold) 123px
+    );
+  opacity: 0.3;
+}
+
+/* Chai cup steam animation */
+.chai-steam {
+  position: absolute;
+  width: 40px;
+  height: 60px;
+  opacity: 0.5;
+  animation: steam-rise 3s ease-out infinite;
+}
+
+@keyframes steam-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-80px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Station board with Ghibli warmth */
+.station-board-ghibli {
+  background: linear-gradient(135deg, var(--ir-yellow) 0%, #E5A812 100%);
+  border: 6px solid var(--chai-brown);
+  border-radius: 24px;
+  padding: 2rem 3rem;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(253, 185, 19, 0.3),
+    inset 0 4px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: visible;
+}
+
+.station-board-ghibli::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 20px;
+  background: var(--chai-brown);
+  border-radius: 20px 20px 0 0;
+}
+
+.station-board-ghibli::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  border: 3px solid rgba(139, 69, 19, 0.4);
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+/* Indian vendor stall aesthetic */
+.vendor-card {
+  background: linear-gradient(135deg, #F5E6D3 0%, #E8D4BB 100%);
+  border: 4px solid var(--chai-brown);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.vendor-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--bollywood-orange) 0px,
+    var(--bollywood-orange) 20px,
+    white 20px,
+    white 25px,
+    var(--ir-green) 25px,
+    var(--ir-green) 45px,
+    white 45px,
+    white 50px
+  );
+}
+
+/* Ticket with Indian railway stamp */
+.ticket-ghibli {
+  background: linear-gradient(135deg, #FFF8DC 0%, var(--ir-cream) 100%);
+  border: 3px dashed var(--chai-brown);
+  border-radius: 16px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.ticket-ghibli::before,
+.ticket-ghibli::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: #0a0a0a;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ticket-ghibli::before {
+  left: -15px;
+}
+
+.ticket-ghibli::after {
+  right: -15px;
+}
+
+/* Railway stamp effect */
+.railway-stamp {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+  border: 4px solid var(--ir-blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--ir-blue);
+  transform: rotate(15deg);
+  opacity: 0.3;
+}
+
+/* Bollywood-style shimmer on cards */
+.bollywood-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.bollywood-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 215, 0, 0.3) 50%,
+    transparent 70%
+  );
+  animation: shimmer 3s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Indian cultural patterns */
+.indian-pattern {
+  background-image:
+    radial-gradient(circle at 20px 20px, var(--bollywood-orange) 2px, transparent 2px),
+    radial-gradient(circle at 60px 60px, var(--bollywood-pink) 2px, transparent 2px),
+    radial-gradient(circle at 40px 80px, var(--bollywood-gold) 2px, transparent 2px);
+  background-size: 100px 100px;
+  opacity: 0.1;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Ghibli-style button with warmth */
+.btn-ghibli {
+  background: linear-gradient(135deg, var(--ir-yellow) 0%, #FFA500 100%);
+  color: var(--chai-brown);
+  border: none;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-weight: 900;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow:
+    0 8px 24px rgba(253, 185, 19, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.5);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ghibli::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  transform: scale(0);
+  transition: transform 0.6s;
+}
+
+.btn-ghibli:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 12px 32px rgba(253, 185, 19, 0.5),
+    inset 0 2px 0 rgba(255, 255, 255, 0.6);
+}
+
+.btn-ghibli:hover::before {
+  transform: scale(1);
+}
+
+.btn-ghibli:active {
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Nostalgia tint overlay */
+.nostalgia-tint {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent 0%,
+    rgba(255, 126, 95, 0.1) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+/* Station name sign - vintage Indian Railways */
+.station-sign {
+  background: var(--ir-blue);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  border: 4px solid white;
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: 0.1em;
+  box-shadow: 0 8px 24px rgba(0, 48, 135, 0.5);
+  position: relative;
+}
+
+.station-sign::before,
+.station-sign::after {
+  content: '★';
+  position: absolute;
+  color: var(--bollywood-gold);
+  font-size: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.station-sign::before {
+  left: -30px;
+}
+
+.station-sign::after {
+  right: -30px;
+}
+
+/* Responsive - maintain magic on mobile */
+@media (max-width: 768px) {
+  .train-silhouette {
+    font-size: 80px;
+    bottom: 60px;
+  }
+
+  .station-board-ghibli {
+    padding: 1.5rem 2rem;
+  }
+
+  .ghibli-cloud {
+    display: none; /* Simplify on mobile for performance */
+  }
+}
+
+/* Dark mode compatibility */
+@media (prefers-color-scheme: dark) {
+  .ghibli-sky {
+    opacity: 0.6;
+  }
+}

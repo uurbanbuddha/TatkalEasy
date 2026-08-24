@@ -2,16 +2,50 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import './index.css'
+import './styles/ghibli-railways.css'
 
-// Clean Portfolio-Inspired Design for Indian Railways
+// Clean UI with Ghibli-Style Indian Railways Aesthetic
+
+// Background Components
+function GhibliBackground() {
+  return (
+    <>
+      <div className="ghibli-sky" />
+      <div className="nostalgia-tint" />
+      <div className="platform-strip" />
+      <div className="railway-pattern" />
+      <div className="decoration-string" />
+
+      {/* Floating clouds */}
+      {[...Array(5)].map((_, i) => (
+        <div
+          key={i}
+          className="ghibli-cloud"
+          style={{
+            width: `${100 + Math.random() * 100}px`,
+            height: `${40 + Math.random() * 30}px`,
+            top: `${Math.random() * 40}%`,
+            animationDuration: `${40 + Math.random() * 40}s`,
+            animationDelay: `${Math.random() * 10}s`
+          }}
+        />
+      ))}
+
+      {/* Animated train */}
+      <div className="train-silhouette">🚂💨</div>
+    </>
+  )
+}
 
 function LandingPage() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+      <GhibliBackground />
+
       {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/10">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/60 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
           <div className="text-2xl font-black tracking-tight">TATKALEASY</div>
           <div className="flex gap-8">
@@ -41,7 +75,7 @@ function LandingPage() {
             <div className="flex gap-6">
               <button
                 onClick={() => navigate('/search')}
-                className="px-12 py-6 bg-[#FDB913] text-black font-bold text-lg rounded-full hover:bg-[#e5a812] transition-all hover:scale-105 active:scale-95"
+                className="btn-ghibli"
               >
                 START BOOKING
               </button>
@@ -80,26 +114,43 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* Demo Info */}
-      <section className="py-32 px-6 border-t border-white/10">
+      {/* Demo Info - Station Board Style */}
+      <section className="py-32 px-6 border-t border-white/10 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl font-black mb-8">FOR JUDGES</h2>
+          <div className="station-board-ghibli inline-block mb-12">
+            <h2 className="text-5xl font-black text-[#654321]">FOR JUDGES</h2>
+          </div>
           <p className="text-2xl text-gray-400 mb-12 leading-relaxed">
             Click "INSTANT DEMO" to test the full booking flow.<br/>
             No login required. Complete flow in 28 seconds.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { label: 'ROUTE', value: 'BLR → MUM' },
-              { label: 'TIME', value: '28 SEC' },
-              { label: 'TRAIN', value: 'RAJDHANI' },
-              { label: 'STATUS', value: 'READY' }
+              { label: 'ROUTE', value: 'BLR → MUM', emoji: '🛤️' },
+              { label: 'TIME', value: '28 SEC', emoji: '⚡' },
+              { label: 'TRAIN', value: 'RAJDHANI', emoji: '🚄' },
+              { label: 'STATUS', value: 'READY', emoji: '✅' }
             ].map((item, i) => (
-              <div key={i} className="bg-white/5 p-6 rounded-2xl border border-white/10">
-                <div className="text-xs text-gray-500 mb-2">{item.label}</div>
-                <div className="text-xl font-bold">{item.value}</div>
-              </div>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="vendor-card p-6 bollywood-shimmer relative"
+              >
+                <div className="text-4xl mb-3">{item.emoji}</div>
+                <div className="text-xs text-gray-600 mb-2 font-bold uppercase">{item.label}</div>
+                <div className="text-xl font-black text-[#654321]">{item.value}</div>
+                <div className="indian-pattern" />
+              </motion.div>
             ))}
+          </div>
+
+          {/* Chai stall vibe */}
+          <div className="mt-12 inline-flex items-center gap-3 bg-[#8B4513]/20 px-6 py-3 rounded-full border-2 border-[#8B4513]">
+            <span className="text-3xl">☕</span>
+            <span className="font-bold text-[#FDB913]">NO LOGIN • INSTANT ACCESS • 28 SECONDS</span>
           </div>
         </div>
       </section>
@@ -112,8 +163,10 @@ function SearchPage() {
   const [form, setForm] = useState({ from: '', to: '', date: new Date().toISOString().split('T')[0], class: 'AC 2-Tier' })
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/10">
+    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+      <GhibliBackground />
+
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/60 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
           <div className="text-2xl font-black tracking-tight cursor-pointer" onClick={() => navigate('/')}>TATKALEASY</div>
         </div>
@@ -198,8 +251,10 @@ function ResultsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/10">
+    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+      <GhibliBackground />
+
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/60 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
           <div className="text-2xl font-black tracking-tight cursor-pointer" onClick={() => navigate('/')}>TATKALEASY</div>
         </div>
@@ -275,8 +330,10 @@ function SeatsPage() {
   const seats = Array.from({ length: 40 }, (_, i) => ({ id: i + 1, booked: Math.random() > 0.6 }))
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/10">
+    <div className="min-h-screen bg-[#0a0a0a] text-white relative overflow-hidden">
+      <GhibliBackground />
+
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/60 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
           <div className="text-2xl font-black tracking-tight cursor-pointer" onClick={() => navigate('/')}>TATKALEASY</div>
         </div>
@@ -340,7 +397,8 @@ function SeatsPage() {
 
 function SuccessPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center px-6">
+    <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center px-6 relative overflow-hidden">
+      <GhibliBackground />
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -350,7 +408,8 @@ function SuccessPage() {
         <h1 className="text-7xl font-black mb-8 tracking-tight">CONFIRMED!</h1>
         <p className="text-3xl text-gray-400 mb-16">Booked in 28 seconds</p>
 
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-12 mb-12">
+        <div className="ticket-ghibli mb-12 relative">
+          <div className="railway-stamp">IR</div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
               { label: 'PNR', value: '8234567890' },
@@ -359,10 +418,13 @@ function SuccessPage() {
               { label: 'AMOUNT', value: '₹2,100' }
             ].map((item, i) => (
               <div key={i}>
-                <div className="text-sm text-gray-500 mb-2">{item.label}</div>
-                <div className="text-2xl font-black">{item.value}</div>
+                <div className="text-sm text-gray-600 mb-2 font-bold">{item.label}</div>
+                <div className="text-2xl font-black text-[#654321]">{item.value}</div>
               </div>
             ))}
+          </div>
+          <div className="mt-8 text-center">
+            <div className="station-sign inline-block">CONFIRMED</div>
           </div>
         </div>
 
