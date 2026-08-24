@@ -1,0 +1,612 @@
+/* INDIAN RAILWAYS AUTHENTIC DESIGN SYSTEM */
+
+:root {
+  /* Indian Railways Official Colors */
+  --ir-yellow: #FDB913; /* Station board yellow */
+  --ir-board-dark: #2C2416; /* Dark brown board background */
+  --ir-cream: #F5E6D3; /* Old train coach cream */
+  --ir-green: #2D5F3F; /* Indian Railways green */
+  --ir-red: #C8102E; /* Signal red */
+  --ir-brown: #654321; /* Railway station brown */
+  --ir-orange: #FF6B35; /* Sunset orange */
+  --ir-platform-grey: #95A5A6;
+
+  /* Heritage Colors */
+  --heritage-gold: #D4AF37;
+  --heritage-maroon: #800020;
+  --heritage-teal: #008080;
+
+  /* Text */
+  --text-dark: #1a1a1a;
+  --text-light: #ffffff;
+}
+
+/* Railway Station Background */
+body {
+  background: linear-gradient(135deg, #2C2416 0%, #1a1410 50%, #0f0c09 100%);
+  position: relative;
+}
+
+/* Railway Tracks Pattern */
+.railway-tracks {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 48%,
+      rgba(219, 188, 127, 0.03) 48%,
+      rgba(219, 188, 127, 0.03) 52%,
+      transparent 52%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 98%,
+      rgba(219, 188, 127, 0.05) 98%,
+      rgba(219, 188, 127, 0.05) 100%
+    );
+  background-size: 200px 60px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* Station Board Typography - Like Flip Boards */
+.station-board-text {
+  font-family: 'Courier New', 'Monaco', monospace;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--text-dark);
+  text-shadow:
+    1px 1px 0px rgba(0,0,0,0.1),
+    2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Yellow Station Board */
+.station-board {
+  background: linear-gradient(180deg, #FDB913 0%, #E5A812 100%);
+  border: 8px solid var(--ir-board-dark);
+  border-radius: 12px;
+  padding: 32px 48px;
+  position: relative;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.6),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.station-board::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  border: 2px solid var(--ir-board-dark);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* Station Board with Flip Effect */
+.station-board-flip {
+  background: var(--ir-board-dark);
+  color: var(--ir-yellow);
+  padding: 24px 32px;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: 8px;
+  text-align: center;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.8),
+    inset 0 2px 0 rgba(253, 185, 19, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.station-board-flip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.3);
+  transform: translateY(-50%);
+}
+
+/* Flip Animation for Letters */
+.flip-letter {
+  display: inline-block;
+  animation: flip 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+@keyframes flip {
+  0%, 100% { transform: rotateX(0deg); }
+  50% { transform: rotateX(90deg); }
+}
+
+/* Platform Number Indicator */
+.platform-indicator {
+  background: linear-gradient(135deg, var(--ir-green) 0%, #1e4530 100%);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-size: 32px;
+  font-weight: 900;
+  text-align: center;
+  border: 4px solid white;
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.5),
+    inset 0 2px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Train Coach Card - Indian Railways Style */
+.train-coach-card {
+  background: linear-gradient(180deg, var(--ir-cream) 0%, #e8d4bb 100%);
+  border: 6px solid var(--ir-green);
+  border-radius: 16px;
+  padding: 32px;
+  position: relative;
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4);
+}
+
+.train-coach-card::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 20px;
+  right: 20px;
+  height: 6px;
+  background: var(--ir-red);
+  border-radius: 3px;
+}
+
+.train-coach-card::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 20px;
+  right: 20px;
+  height: 6px;
+  background: var(--heritage-gold);
+  border-radius: 3px;
+}
+
+/* Heritage Train Number Plate */
+.train-number-plate {
+  background: linear-gradient(135deg, var(--heritage-maroon) 0%, #5c0016 100%);
+  color: white;
+  padding: 12px 32px;
+  border-radius: 8px;
+  border: 4px solid var(--heritage-gold);
+  font-size: 36px;
+  font-weight: 900;
+  text-align: center;
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.6),
+    inset 0 2px 0 rgba(212, 175, 55, 0.3);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* Vintage Ticket Style */
+.vintage-ticket {
+  background: linear-gradient(180deg, #fff8dc 0%, #f5e6d3 100%);
+  border: 3px dashed var(--ir-brown);
+  border-radius: 0;
+  padding: 24px;
+  position: relative;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.vintage-ticket::before,
+.vintage-ticket::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: var(--ir-board-dark);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.vintage-ticket::before {
+  left: -15px;
+}
+
+.vintage-ticket::after {
+  right: -15px;
+}
+
+/* Railway Signal Lights */
+.signal-light {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--ir-green);
+  box-shadow:
+    0 0 20px var(--ir-green),
+    0 0 40px rgba(45, 95, 63, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  animation: signal-blink 2s ease-in-out infinite;
+}
+
+@keyframes signal-blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.signal-light.red {
+  background: var(--ir-red);
+  box-shadow:
+    0 0 20px var(--ir-red),
+    0 0 40px rgba(200, 16, 46, 0.6);
+}
+
+.signal-light.yellow {
+  background: var(--ir-yellow);
+  box-shadow:
+    0 0 20px var(--ir-yellow),
+    0 0 40px rgba(253, 185, 19, 0.6);
+}
+
+/* Indian Railways Logo Style Border */
+.ir-logo-border {
+  border: 4px solid var(--ir-green);
+  border-radius: 12px;
+  position: relative;
+}
+
+.ir-logo-border::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border: 2px solid var(--heritage-gold);
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+/* Station Platform Number Circle */
+.platform-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ir-yellow) 0%, #e5a812 100%);
+  border: 6px solid var(--ir-board-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--ir-board-dark);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Heritage Train Name Banner */
+.heritage-banner {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--heritage-maroon) 10%,
+    var(--heritage-maroon) 90%,
+    transparent 100%
+  );
+  padding: 16px 48px;
+  color: var(--heritage-gold);
+  font-size: 28px;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.6),
+    inset 0 2px 0 rgba(212, 175, 55, 0.2);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+
+.heritage-banner::before,
+.heritage-banner::after {
+  content: '★';
+  position: absolute;
+  font-size: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--heritage-gold);
+  text-shadow: 0 0 10px currentColor;
+}
+
+.heritage-banner::before {
+  left: 16px;
+}
+
+.heritage-banner::after {
+  right: 16px;
+}
+
+/* Railway Crossing Gate Pattern */
+.crossing-gate {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--ir-red) 0px,
+      var(--ir-red) 40px,
+      white 40px,
+      white 80px
+    );
+  height: 8px;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Departure Board Row */
+.departure-row {
+  background: var(--ir-board-dark);
+  color: var(--ir-yellow);
+  padding: 20px 32px;
+  margin: 8px 0;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+  gap: 24px;
+  font-family: 'Courier New', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  align-items: center;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.6),
+    inset 0 2px 0 rgba(253, 185, 19, 0.1);
+  transition: all 0.3s;
+}
+
+.departure-row:hover {
+  background: #3a2f1f;
+  transform: translateX(8px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.8),
+    inset 0 2px 0 rgba(253, 185, 19, 0.2);
+}
+
+/* Indian Railways Button */
+.ir-button {
+  background: linear-gradient(135deg, var(--ir-green) 0%, #1e4530 100%);
+  color: white;
+  padding: 20px 48px;
+  border: 4px solid var(--heritage-gold);
+  border-radius: 12px;
+  font-size: 24px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 2px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s;
+}
+
+.ir-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.ir-button:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.6),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  border-color: white;
+}
+
+.ir-button:hover::before {
+  left: 100%;
+}
+
+/* Seat as Train Coach Window */
+.seat-window {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(180deg, #87CEEB 0%, #4A90A4 100%);
+  border: 6px solid var(--ir-brown);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text-dark);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.seat-window::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--ir-brown);
+}
+
+.seat-window::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: var(--ir-brown);
+}
+
+.seat-window.available {
+  background: linear-gradient(180deg, #90EE90 0%, #5FB85F 100%);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(144, 238, 144, 0.3);
+}
+
+.seat-window.available:hover {
+  transform: translateY(-8px) scale(1.1);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(144, 238, 144, 0.5);
+  border-color: var(--ir-green);
+}
+
+.seat-window.selected {
+  background: linear-gradient(135deg, var(--ir-yellow) 0%, #e5a812 100%);
+  border-color: var(--ir-board-dark);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(253, 185, 19, 0.6);
+  animation: seat-selected-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes seat-selected-glow {
+  0%, 100% {
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      0 0 40px rgba(253, 185, 19, 0.6);
+  }
+  50% {
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      0 0 60px rgba(253, 185, 19, 0.9);
+  }
+}
+
+.seat-window.booked {
+  background: linear-gradient(135deg, #8B7355 0%, #5C4033 100%);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Station Name Title */
+.station-name {
+  font-size: clamp(48px, 8vw, 100px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 8px;
+  color: var(--ir-yellow);
+  text-shadow:
+    2px 2px 0 var(--ir-board-dark),
+    4px 4px 0 var(--heritage-gold),
+    6px 6px 20px rgba(0, 0, 0, 0.8);
+  line-height: 1.1;
+}
+
+/* Train Running Animation */
+.train-running {
+  font-size: 80px;
+  animation: train-move 8s linear infinite;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.6));
+}
+
+@keyframes train-move {
+  0% {
+    transform: translateX(-100vw) scaleX(1);
+  }
+  48% {
+    transform: translateX(50vw) scaleX(1);
+  }
+  50% {
+    transform: translateX(50vw) scaleX(1) rotateY(180deg);
+  }
+  98% {
+    transform: translateX(-100vw) scaleX(1) rotateY(180deg);
+  }
+  100% {
+    transform: translateX(-100vw) scaleX(1);
+  }
+}
+
+/* Chai Stall Banner */
+.chai-stall-banner {
+  background: linear-gradient(135deg, var(--ir-orange) 0%, #d45a2a 100%);
+  color: white;
+  padding: 12px 32px;
+  border-radius: 24px;
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  display: inline-block;
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.5),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Railway Stats Counter */
+.railway-stat {
+  background: var(--ir-board-dark);
+  color: var(--ir-yellow);
+  padding: 32px;
+  border-radius: 12px;
+  border: 4px solid var(--heritage-gold);
+  text-align: center;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    inset 0 2px 0 rgba(253, 185, 19, 0.1);
+}
+
+.railway-stat-number {
+  font-size: 64px;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 4px;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Steam Effect (Subtle) */
+@keyframes steam {
+  0% {
+    opacity: 0.6;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(1.5);
+  }
+}
+
+.steam-particle {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: steam 4s ease-out infinite;
+  pointer-events: none;
+}
