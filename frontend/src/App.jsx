@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import { motion, AnimatePresence } from 'framer-motion'
 import './index.css'
 import './styles/indian-railways.css'
+import './styles/enhanced-railways.css'
 
 // Railway Tracks Background
 function RailwayTracks() {
@@ -109,17 +110,18 @@ function LandingPage() {
               initial={{ opacity: 0, scale: 0.9, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="station-board mb-8 mx-auto max-w-5xl"
+              className="station-board-enhanced mb-8 mx-auto max-w-5xl"
+              role="banner"
             >
               <h1 className="station-board-text text-7xl md:text-8xl mb-4">
                 TATKAL
                 <br />
                 <span className="text-5xl md:text-6xl">REIMAGINED</span>
               </h1>
-              <div className="flex justify-center gap-4 mt-6">
-                <div className="signal-light"></div>
-                <div className="signal-light yellow"></div>
-                <div className="signal-light red"></div>
+              <div className="flex justify-center gap-4 mt-6" role="presentation" aria-label="Railway signal lights">
+                <div className="signal-light-enhanced" aria-label="Green signal"></div>
+                <div className="signal-light-enhanced yellow" aria-label="Yellow signal"></div>
+                <div className="signal-light-enhanced red" aria-label="Red signal"></div>
               </div>
             </motion.div>
 
@@ -162,19 +164,21 @@ function LandingPage() {
             >
               <button
                 onClick={() => navigate('/search')}
-                className="ir-button"
+                className="btn-railway-enhanced"
+                aria-label="Book a train ticket"
               >
                 🎫 BOOK TICKET
               </button>
 
               <button
                 onClick={() => navigate('/results')}
-                className="ir-button"
+                className="btn-railway-enhanced"
                 style={{
                   background: 'linear-gradient(135deg, #FDB913 0%, #e5a812 100%)',
                   color: '#2C2416',
                   borderColor: '#2C2416'
                 }}
+                aria-label="Try instant demo without login"
               >
                 ⚡ INSTANT DEMO
               </button>
