@@ -1,0 +1,867 @@
+/* ============================================================================
+   RAILWAY IDENTITY LAYER
+   Injects actual Indian Railways visual identity (navy/yellow, tricolor,
+   level-crossing hazard stripes, departure-board styling) on top of the
+   brutalist fusion base. Loaded last so it wins the cascade.
+
+   Typography pairing ("Modern Professional": Poppins + Open Sans) and the
+   single-accent-color discipline below are applied per ui-ux-pro-max's
+   Minimalism & Swiss Style guidance, which explicitly lists this product
+   category ("SaaS, corporate sites, business apps, professional services")
+   as the Best-For match — and Brutalism's own Do-Not-Use-For as excluding
+   "customer-facing professional" products.
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --railway-navy: #0B2545;
+  --railway-navy-light: #13315C;
+  --hazard-black: #1A1A1A;
+  --hazard-yellow: #FFC72C;
+  --board-amber: #FF9F1C;
+
+  /* Typography: Modern Professional pairing */
+  --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-primary: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Single accent-color discipline (Minimalism checklist: "single primary only") —
+     collapses the old --accent-orange onto the railway yellow everywhere it's used */
+  --accent-orange: var(--hazard-yellow);
+}
+
+body {
+  font-family: var(--font-primary);
+}
+
+h1, h2, h3, h4, h5, h6,
+.hero-title-ultimate,
+.hero-label-ultimate,
+.section-title-ultimate,
+.section-label-small,
+.cta-title,
+.ultimate-cta-title,
+.demo-page-title,
+.works-page-title,
+.archives-page-title,
+.brand-ultimate,
+.solution-card-title,
+.demo-step-panel h2 {
+  font-family: var(--font-heading);
+}
+
+/* Respect reduced-motion preference for CSS-driven transitions/hovers */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Tricolor strip — thin national-colors accent bar, not a flag reproduction */
+.tricolor-strip {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    #FF9933 0%, #FF9933 33.33%,
+    #FFFFFF 33.33%, #FFFFFF 66.66%,
+    #138808 66.66%, #138808 100%
+  );
+}
+
+/* ============================================================================
+   NAVIGATION — Railway navy takeover
+   ============================================================================ */
+
+.temporal-nav {
+  background: var(--railway-navy);
+  border-bottom: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.brand-ultimate {
+  color: var(--hazard-yellow) !important;
+}
+
+.nav-link-temporal {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.nav-link-temporal::before {
+  background: var(--hazard-yellow) !important;
+}
+
+.nav-link-temporal:hover {
+  color: #FFFFFF !important;
+}
+
+.nav-timestamp {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.live-clock {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.nav-right-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+/* ============================================================================
+   LANGUAGE SWITCHER
+   ============================================================================ */
+
+.language-switcher {
+  position: relative;
+}
+
+.language-switcher-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: var(--space-2) var(--space-4);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full);
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.language-switcher-trigger:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--hazard-yellow);
+}
+
+.language-icon {
+  font-size: var(--text-base);
+}
+
+.language-current {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.language-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-modal);
+}
+
+.language-dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-3));
+  right: 0;
+  width: 260px;
+  max-height: 380px;
+  overflow-y: auto;
+  background: #FFFFFF;
+  border: 2px solid var(--black);
+  box-shadow: 6px 6px 0 var(--railway-navy);
+  z-index: calc(var(--z-modal) + 1);
+}
+
+.language-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--grey-200);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.language-option:hover {
+  background: var(--grey-100);
+}
+
+.language-option.active {
+  background: var(--railway-navy);
+}
+
+.language-option.active .language-native,
+.language-option.active .language-name {
+  color: #FFFFFF;
+}
+
+.language-native {
+  font-weight: 700;
+  font-size: var(--text-base);
+  color: var(--black);
+}
+
+.language-name {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--grey-500);
+}
+
+/* ============================================================================
+   HERO — railway navy gradient instead of stark white
+   ============================================================================ */
+
+.ultimate-hero {
+  background: radial-gradient(ellipse at top, rgba(11, 37, 69, 0.06), transparent 60%);
+}
+
+.hero-label-ultimate {
+  color: var(--railway-navy);
+}
+
+.interactive-hero-word {
+  color: var(--railway-navy);
+}
+
+/* ============================================================================
+   LEVEL-CROSSING DIVIDER — replaces plain hairline with hazard stripes
+   ============================================================================ */
+
+.railway-divider {
+  padding: 0;
+}
+
+.track-line-ultimate {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border-top: none;
+  height: 10px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--hazard-black) 0px,
+    var(--hazard-black) 16px,
+    var(--hazard-yellow) 16px,
+    var(--hazard-yellow) 32px
+  );
+}
+
+.track-bolt {
+  display: none;
+}
+
+/* ============================================================================
+   DEPARTURE BOARD — train cards styled like station split-flap displays
+   ============================================================================ */
+
+.departure-board {
+  background: var(--hazard-black) !important;
+  border: 2px solid var(--board-amber) !important;
+  color: var(--board-amber) !important;
+}
+
+.departure-board .train-info h3,
+.departure-board .train-info p,
+.departure-board .train-time,
+.departure-board .train-duration,
+.departure-board .seats-available {
+  font-family: var(--font-mono);
+  color: var(--board-amber) !important;
+  letter-spacing: 0.04em;
+}
+
+.departure-board .price-amount {
+  color: var(--hazard-yellow) !important;
+  font-family: var(--font-mono);
+}
+
+.departure-board:hover {
+  background: #000000 !important;
+  box-shadow: 8px 8px 0 var(--hazard-yellow) !important;
+}
+
+.train-badge {
+  display: inline-block;
+  margin-left: var(--space-3);
+  padding: 2px var(--space-2);
+  font-size: var(--text-xs);
+  background: var(--hazard-yellow);
+  color: var(--hazard-black);
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================================
+   DEMO FLOW — error/hint/action styling
+   ============================================================================ */
+
+.demo-error-banner {
+  background: #FEE2E2;
+  border: 2px solid var(--railway-red);
+  color: var(--railway-red);
+  padding: var(--space-4) var(--space-6);
+  margin-bottom: var(--space-6);
+  font-weight: 600;
+}
+
+.demo-hint {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--grey-500);
+  margin: var(--space-3) 0 var(--space-6);
+}
+
+.demo-step-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  flex-wrap: wrap;
+}
+
+/* ============================================================================
+   PNR CHECKER WIDGET
+   ============================================================================ */
+
+.pnr-checker-widget {
+  margin-top: var(--space-16);
+  padding: var(--space-10);
+  border: 3px solid var(--railway-navy);
+  background: var(--grey-100);
+}
+
+.pnr-checker-widget h3 {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--railway-navy);
+  margin-bottom: var(--space-2);
+}
+
+.pnr-checker-row {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.pnr-checker-row input {
+  flex: 1;
+  font-family: var(--font-primary);
+  font-size: var(--text-lg);
+  padding: var(--space-4) var(--space-6);
+  border: 2px solid var(--black);
+  background: #FFFFFF;
+}
+
+.pnr-result {
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  background: #FFFFFF;
+  border: 2px solid var(--grey-300);
+}
+
+.pnr-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-8) 0;
+}
+
+.pnr-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4) var(--space-6);
+  background: var(--hazard-black);
+  color: var(--board-amber);
+  font-family: var(--font-mono);
+  border: 2px solid var(--hazard-yellow);
+}
+
+.pnr-label {
+  font-size: var(--text-xs);
+  opacity: 0.7;
+}
+
+.pnr-value {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--hazard-yellow);
+}
+
+.pnr-status {
+  color: var(--railway-green);
+  font-weight: 700;
+}
+
+/* ============================================================================
+   BUTTON ACCENT — railway yellow instead of pure black/orange
+   ============================================================================ */
+
+.brutalist-btn-ultimate.primary {
+  background: var(--railway-navy);
+  border-color: var(--railway-navy);
+}
+
+.brutalist-btn-ultimate.primary::before {
+  background: var(--hazard-yellow);
+}
+
+.brutalist-btn-ultimate.primary:hover {
+  color: var(--hazard-black);
+}
+
+.brutalist-btn-ultimate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.brutalist-btn-ultimate:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================================
+   ACCESSIBILITY UTILITIES
+   ============================================================================ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10000;
+  background: var(--hazard-yellow);
+  color: var(--hazard-black);
+  padding: var(--space-3) var(--space-6);
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  left: var(--space-4);
+  top: var(--space-4);
+}
+
+.demo-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.demo-field label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--grey-500);
+}
+
+/* Visible focus states — brutalist buttons had none beyond hover */
+.brutalist-btn-ultimate:focus-visible,
+.nav-link-temporal:focus-visible,
+.language-switcher-trigger:focus-visible,
+.language-option:focus-visible,
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--hazard-yellow);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   CHAT WIDGET
+   ============================================================================ */
+
+.chat-widget {
+  position: fixed;
+  bottom: var(--space-8);
+  left: var(--space-8);
+  z-index: var(--z-toast);
+}
+
+.chat-toggle-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--railway-navy);
+  color: var(--hazard-yellow);
+  border: 3px solid var(--hazard-yellow);
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.chat-panel {
+  position: absolute;
+  bottom: 76px;
+  left: 0;
+  width: 340px;
+  max-height: 480px;
+  background: #FFFFFF;
+  border: 3px solid var(--railway-navy);
+  box-shadow: 8px 8px 0 var(--hazard-yellow);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  background: var(--railway-navy);
+  color: #FFFFFF;
+  padding: var(--space-4) var(--space-5);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header-sub {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.chat-close-btn {
+  background: transparent;
+  color: #FFFFFF;
+  font-size: var(--text-xl);
+  cursor: pointer;
+  border: none;
+  line-height: 1;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 200px;
+}
+
+.chat-bubble {
+  max-width: 85%;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  border-radius: var(--radius-lg);
+}
+
+.chat-bubble.user {
+  align-self: flex-end;
+  background: var(--railway-navy);
+  color: #FFFFFF;
+}
+
+.chat-bubble.assistant {
+  align-self: flex-start;
+  background: var(--grey-100);
+  color: var(--black);
+  border: 1px solid var(--grey-200);
+}
+
+.chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: 0 var(--space-4) var(--space-3);
+}
+
+.chat-suggestion-chip {
+  font-size: var(--text-xs);
+  padding: var(--space-2) var(--space-3);
+  background: var(--grey-100);
+  border: 1px solid var(--railway-navy);
+  color: var(--railway-navy);
+  cursor: pointer;
+  border-radius: var(--radius-full);
+}
+
+.chat-suggestion-chip:hover {
+  background: var(--railway-navy);
+  color: #FFFFFF;
+}
+
+.chat-input-row {
+  display: flex;
+  border-top: 2px solid var(--grey-200);
+}
+
+.chat-input-row input {
+  flex: 1;
+  border: none;
+  padding: var(--space-4);
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+}
+
+.chat-input-row button {
+  padding: var(--space-4) var(--space-5);
+  background: var(--railway-navy);
+  color: var(--hazard-yellow);
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .chat-widget {
+    left: var(--space-4);
+    bottom: var(--space-4);
+  }
+
+  .chat-panel {
+    width: calc(100vw - 32px);
+  }
+}
+
+/* ============================================================================
+   VOICE SEARCH
+   ============================================================================ */
+
+.voice-search-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.voice-search-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: var(--railway-navy);
+  color: #FFFFFF;
+  border: 2px solid var(--railway-navy);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.voice-search-btn.listening {
+  background: var(--railway-red);
+  border-color: var(--railway-red);
+  animation: pulse-listening 1s ease-in-out infinite;
+}
+
+@keyframes pulse-listening {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(211, 47, 47, 0); }
+}
+
+/* ============================================================================
+   DISCLOSURE BANNER
+   ============================================================================ */
+
+.disclosure-banner {
+  margin: var(--space-6) 0 var(--space-10);
+  border: 2px solid var(--railway-navy);
+  background: #FFFBEB;
+}
+
+.disclosure-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-6);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--railway-navy);
+  letter-spacing: 0.03em;
+}
+
+.disclosure-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  padding: 0 var(--space-6) var(--space-6);
+  overflow: hidden;
+}
+
+.disclosure-col h4 {
+  font-size: var(--text-sm);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-3);
+  color: var(--railway-navy);
+}
+
+.disclosure-col ul {
+  padding-left: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.disclosure-col li {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--grey-600);
+}
+
+@media (max-width: 768px) {
+  .disclosure-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================================
+   TOOLS GRID (additional live-wired widgets on the Demo page)
+   ============================================================================ */
+
+.tools-section-header {
+  margin-top: var(--space-20);
+  text-align: center;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.tools-grid .pnr-checker-widget {
+  margin-top: 0;
+}
+
+.live-stations-list {
+  margin-top: var(--space-4);
+  display: grid;
+  gap: var(--space-1);
+}
+
+.live-station-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  border-bottom: 1px solid var(--grey-200);
+}
+
+.live-station-row.current {
+  background: var(--hazard-yellow);
+  font-weight: 700;
+}
+
+.live-station-row.departed {
+  color: var(--grey-400);
+}
+
+.coach-strip {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.coach-block {
+  padding: var(--space-3) var(--space-4);
+  background: var(--hazard-black);
+  color: var(--board-amber);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border: 2px solid var(--hazard-yellow);
+}
+
+.facility-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.facility-tag {
+  font-size: var(--text-xs);
+  padding: var(--space-2) var(--space-3);
+  background: var(--grey-100);
+  border: 1px solid var(--grey-300);
+  border-radius: var(--radius-full);
+}
+
+.food-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+.food-item-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background: #FFFFFF;
+  border: 2px solid var(--grey-300);
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+}
+
+.food-item-btn.selected {
+  border-color: var(--railway-navy);
+  background: var(--railway-navy);
+  color: #FFFFFF;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .nav-right-group {
+    gap: var(--space-3);
+  }
+
+  .language-current {
+    display: none;
+  }
+
+  .language-dropdown {
+    right: -60px;
+    width: 240px;
+  }
+
+  .pnr-checker-row {
+    flex-direction: column;
+  }
+
+  .pnr-row {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+}
