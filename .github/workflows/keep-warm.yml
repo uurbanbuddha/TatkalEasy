@@ -1,0 +1,20 @@
+name: Keep backend warm
+
+# Render's free tier spins down the backend after ~15 minutes idle, and the
+# first request after that takes 20-30+ seconds — directly contradicting a
+# product whose core pitch is a 28-second booking flow. This pings /health
+# often enough that a judge opening the live link never hits a cold start.
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping backend health endpoint
+        run: |
+          curl -sf -o /dev/null -w "Backend responded: %{http_code} in %{time_total}s\n" \
+            https://tatkaleasy-backend.onrender.com/health || echo "Ping failed — backend may be cold-starting or down"

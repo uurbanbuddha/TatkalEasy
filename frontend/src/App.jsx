@@ -1654,15 +1654,19 @@ function DisclosureBanner() {
               <h4>REAL</h4>
               <ul>
                 <li>Booking flow logic runs end-to-end against a live FastAPI backend (not client-side fakery)</li>
+                <li>Trains are real: actual train numbers, names and routes for long-standing Indian Railways services (e.g. 12951 Mumbai Rajdhani Express) — not invented</li>
+                <li>Fares are calculated from real distance × per-class per-km rate + reservation/superfast charges, not one flat number regardless of distance</li>
                 <li>PNR check, cancel/refund, coach position, platform info, food order all call real endpoints</li>
-                <li>Chat assistant is wired to a real OpenAI model (falls back to rule-based replies if the account has no API quota)</li>
-                <li>20-language switcher, accessibility labels, and reduced-motion support are functional</li>
+                <li>Tatkal alerts send a real confirmation email if SMTP is configured on the deployment (the scheduled T-minus-15-min trigger itself is not implemented — that needs a persistent background worker)</li>
+                <li>Chat assistant calls a real OpenAI model; falls back to rule-based replies if the account has no API quota</li>
+                <li>20-language switcher, voice search, accessibility labels, and reduced-motion support are functional</li>
               </ul>
             </div>
             <div className="disclosure-col">
               <h4>MOCKED (intentionally, per the brief)</h4>
               <ul>
-                <li>Train data, seat inventory, and running status are synthetic — no real IRCTC or Indian Railways systems are accessed</li>
+                <li>Live seat inventory, running status/GPS, and actual booking are simulated — no real IRCTC or Indian Railways systems are accessed (there is no public individual-booking API; real access requires a formal CRIS/IRCTC partner agreement)</li>
+                <li>Exact live timings and current fares are illustrative, not pulled from today's live timetable</li>
                 <li>PNRs, payments, and passenger records are simulated — no real money, OTPs, or personal data are processed</li>
                 <li>This is not, and does not claim to be, an official Indian Railways or IRCTC product</li>
               </ul>
@@ -1724,8 +1728,8 @@ function UltimateDemo() {
 
 function DemoBookingFlow({ step, setStep }) {
   const [searchParams, setSearchParams] = useState({
-    from: 'Bangalore',
-    to: 'Mumbai',
+    from: 'New Delhi',
+    to: 'Mumbai Central',
     date: new Date().toISOString().split('T')[0],
     travelClass: 'AC 2-Tier'
   })
@@ -1924,8 +1928,25 @@ function useVoiceSearch(onParsed) {
   return { listening, supported, start }
 }
 
+function useColdStartAwareLabel(loading, shortLabel) {
+  const [slow, setSlow] = useState(false)
+
+  useEffect(() => {
+    if (!loading) {
+      setSlow(false)
+      return
+    }
+    const timer = setTimeout(() => setSlow(true), 4000)
+    return () => clearTimeout(timer)
+  }, [loading])
+
+  if (!loading) return shortLabel
+  return slow ? 'Waking up the server (free-tier cold start, ~30s)...' : 'Loading...'
+}
+
 function DemoStepSearch({ searchParams, setSearchParams, loading, onSearch }) {
   const { t } = useLanguage()
+  const searchLabel = useColdStartAwareLabel(loading, `${t('search').toUpperCase()} TRAINS →`)
 
   const { listening, supported, start } = useVoiceSearch((transcript) => {
     const cleaned = transcript.toLowerCase().replace(/^from\s+/, '')
@@ -1966,7 +1987,7 @@ function DemoStepSearch({ searchParams, setSearchParams, loading, onSearch }) {
             <input
               id="search-from"
               type="text"
-              placeholder="e.g. Bangalore"
+              placeholder="e.g. New Delhi"
               value={searchParams.from}
               onChange={(e) => setSearchParams({ ...searchParams, from: e.target.value })}
             />
@@ -1976,7 +1997,7 @@ function DemoStepSearch({ searchParams, setSearchParams, loading, onSearch }) {
             <input
               id="search-to"
               type="text"
-              placeholder="e.g. Mumbai"
+              placeholder="e.g. Mumbai Central"
               value={searchParams.to}
               onChange={(e) => setSearchParams({ ...searchParams, to: e.target.value })}
             />
@@ -2007,7 +2028,7 @@ function DemoStepSearch({ searchParams, setSearchParams, loading, onSearch }) {
             </select>
           </div>
         </div>
-        <p className="demo-hint">Try: Bangalore → Mumbai, or Delhi → Kolkata / Delhi → Mumbai (live API routes)</p>
+        <p className="demo-hint">Real routes to try: New Delhi → Mumbai Central, New Delhi → Howrah (Kolkata), New Delhi → KSR Bengaluru, New Delhi → Chennai Central, Mumbai CST → KSR Bengaluru</p>
         <motion.button
           className="brutalist-btn-ultimate primary"
           onClick={onSearch}
@@ -2015,7 +2036,7 @@ function DemoStepSearch({ searchParams, setSearchParams, loading, onSearch }) {
           whileHover={{ scale: loading ? 1 : 1.05 }}
           whileTap={{ scale: loading ? 1 : 0.95 }}
         >
-          {loading ? t('loading') : `${t('search').toUpperCase()} TRAINS →`}
+          {searchLabel}
         </motion.button>
       </div>
     </div>
