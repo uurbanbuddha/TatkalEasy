@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { motion, useScroll, useTransform, useInView, useSpring, useMotionValue, useVelocity, AnimatePresence } from 'framer-motion'
 import './index.css'
 import './styles/ultimate-fusion.css'
@@ -74,6 +74,11 @@ function UltimateHome() {
       {/* Main Hero Section */}
       <UltimateHero navigate={navigate} handleSaveItem={handleSaveItem} />
 
+      {/* Trust Badges + Quick Actions + Popular Routes */}
+      <TrustBadgesStrip />
+      <QuickActionsRow navigate={navigate} />
+      <PopularRoutesGrid navigate={navigate} />
+
       {/* Railway Track Divider */}
       <RailwayTrackDivider />
 
@@ -121,6 +126,12 @@ function UltimateHome() {
 
       {/* Works Gallery Preview (Adam Jakubowski style) */}
       <WorksPreview navigate={navigate} />
+
+      {/* Railway Track Divider */}
+      <RailwayTrackDivider />
+
+      {/* PWA Install Banner */}
+      <PWAInstallBanner />
 
       {/* Railway Track Divider */}
       <RailwayTrackDivider />
@@ -404,6 +415,177 @@ function HeroStats() {
         </motion.div>
       ))}
     </div>
+  )
+}
+
+// ============================================================================
+// TRUST BADGES STRIP — reinforces real differentiators at the decision point
+// ============================================================================
+
+function TrustBadgesStrip() {
+  const badges = [
+    { icon: '⚡', text: '28-second booking' },
+    { icon: '🌐', text: '20 Indian languages' },
+    { icon: '🎤', text: 'Voice search built in' },
+    { icon: '🚂', text: 'Real train data, not placeholders' },
+  ]
+
+  return (
+    <div className="trust-badges-strip">
+      <div className="container-ultimate">
+        <div className="trust-badges-row">
+          {badges.map((b, i) => (
+            <motion.div
+              key={i}
+              className="trust-badge"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 + 1, duration: 0.4 }}
+            >
+              <span aria-hidden="true">{b.icon}</span> {b.text}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================================
+// QUICK ACTIONS ROW — surfaces tools already built but buried inside /demo
+// ============================================================================
+
+function QuickActionsRow({ navigate }) {
+  const actions = [
+    { icon: '🎫', label: 'Book Ticket', hash: '' },
+    { icon: '🔍', label: 'PNR Status', hash: 'pnr-status' },
+    { icon: '📍', label: 'Running Status', hash: 'live-status' },
+    { icon: '❌', label: 'Cancel & Refund', hash: 'cancel-ticket' },
+    { icon: '🚃', label: 'Coach Position', hash: 'coach-position' },
+    { icon: '🛤️', label: 'Platform Info', hash: 'platform-info' },
+    { icon: '🍛', label: 'Order Food', hash: 'food-order' },
+    { icon: '🧾', label: 'My Bookings', hash: '', route: '/bookings' },
+  ]
+
+  return (
+    <section className="quick-actions-section">
+      <div className="container-ultimate">
+        <div className="quick-actions-grid">
+          {actions.map((a, i) => (
+            <motion.button
+              key={i}
+              className="quick-action-btn"
+              onClick={() => navigate(a.route || `/demo${a.hash ? '#' + a.hash : ''}`)}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              whileHover={{ y: -4 }}
+            >
+              <span className="quick-action-icon" aria-hidden="true">{a.icon}</span>
+              <span className="quick-action-label">{a.label}</span>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ============================================================================
+// POPULAR ROUTES GRID — real routes from the actual backend dataset
+// ============================================================================
+
+function PopularRoutesGrid({ navigate }) {
+  const routes = [
+    { from: 'New Delhi', to: 'Mumbai Central', trainCount: 1, label: 'Mumbai' },
+    { from: 'New Delhi', to: 'Howrah (Kolkata)', trainCount: 1, label: 'Kolkata' },
+    { from: 'New Delhi', to: 'KSR Bengaluru', trainCount: 1, label: 'Bengaluru' },
+    { from: 'New Delhi', to: 'Chennai Central', trainCount: 1, label: 'Chennai' },
+    { from: 'Mumbai CST', to: 'KSR Bengaluru', trainCount: 1, label: 'Bengaluru' },
+  ]
+
+  const goToRoute = (route) => {
+    navigate('/demo', { state: { from: route.from, to: route.to } })
+  }
+
+  return (
+    <section className="popular-routes-section">
+      <div className="container-ultimate">
+        <div className="section-header-ultimate">
+          <span className="section-label-small">POPULAR ROUTES</span>
+          <h2 className="section-title-ultimate" style={{ fontSize: '32px' }}>
+            REAL TRAINS, <span className="text-uppercase">ONE TAP AWAY</span>
+          </h2>
+        </div>
+        <div className="popular-routes-grid">
+          {routes.map((r, i) => (
+            <motion.button
+              key={i}
+              className="popular-route-card"
+              onClick={() => goToRoute(r)}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              whileHover={{ y: -6 }}
+            >
+              <div className="route-card-cities">
+                <span>{r.from}</span>
+                <span aria-hidden="true">→</span>
+                <span>{r.to}</span>
+              </div>
+              <div className="route-card-meta">Real train on this route · Book now →</div>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ============================================================================
+// PWA INSTALL BANNER — surfaces the already-built install capability
+// ============================================================================
+
+function PWAInstallBanner() {
+  const [installEvent, setInstallEvent] = useState(null)
+  const [installed, setInstalled] = useState(false)
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault()
+      setInstallEvent(e)
+    }
+    window.addEventListener('beforeinstallprompt', handler)
+    window.addEventListener('appinstalled', () => setInstalled(true))
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
+
+  if (installed) return null
+
+  return (
+    <section className="pwa-banner-section">
+      <div className="container-ultimate">
+        <div className="pwa-banner">
+          <div className="pwa-banner-text">
+            <h3>INSTALL TATKALEASY AS AN APP</h3>
+            <p>Real PWA — works offline, launches from your home screen, no app store needed.</p>
+          </div>
+          {installEvent ? (
+            <motion.button
+              className="brutalist-btn-ultimate primary"
+              onClick={() => installEvent.prompt()}
+              whileHover={{ scale: 1.05 }}
+            >
+              INSTALL NOW →
+            </motion.button>
+          ) : (
+            <span className="demo-hint">Use your browser's "Install app" / "Add to Home Screen" option</span>
+          )}
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -1686,7 +1868,17 @@ function DisclosureBanner() {
 
 function UltimateDemo() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [step, setStep] = useState(1)
+
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.querySelector(location.hash)
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300)
+      }
+    }
+  }, [location.hash])
 
   return (
     <div className="ultimate-page" id="main-content">
@@ -1705,7 +1897,7 @@ function UltimateDemo() {
 
           <DisclosureBanner />
 
-          <DemoBookingFlow step={step} setStep={setStep} />
+          <DemoBookingFlow step={step} setStep={setStep} initialParams={location.state} />
 
           <div className="tools-section-header">
             <h2 className="section-title-ultimate" style={{ fontSize: '32px' }}>MORE LIVE TOOLS</h2>
@@ -1713,12 +1905,12 @@ function UltimateDemo() {
           </div>
 
           <div className="tools-grid">
-            <PNRCheckerWidget />
-            <LiveStatusWidget />
-            <CancelTicketWidget />
-            <CoachPositionWidget />
-            <PlatformInfoWidget />
-            <FoodOrderWidget />
+            <div id="pnr-status"><PNRCheckerWidget /></div>
+            <div id="live-status"><LiveStatusWidget /></div>
+            <div id="cancel-ticket"><CancelTicketWidget /></div>
+            <div id="coach-position"><CoachPositionWidget /></div>
+            <div id="platform-info"><PlatformInfoWidget /></div>
+            <div id="food-order"><FoodOrderWidget /></div>
           </div>
         </div>
       </section>
@@ -1728,10 +1920,10 @@ function UltimateDemo() {
   )
 }
 
-function DemoBookingFlow({ step, setStep }) {
+function DemoBookingFlow({ step, setStep, initialParams }) {
   const [searchParams, setSearchParams] = useState({
-    from: 'New Delhi',
-    to: 'Mumbai Central',
+    from: initialParams?.from || 'New Delhi',
+    to: initialParams?.to || 'Mumbai Central',
     date: new Date().toISOString().split('T')[0],
     travelClass: 'AC 2-Tier'
   })
