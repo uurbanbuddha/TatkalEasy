@@ -21,6 +21,7 @@ function UltimateFusionApp() {
         <Route path="/demo" element={<UltimateDemo />} />
         <Route path="/works" element={<WorksGallery />} />
         <Route path="/archives" element={<ArchivesPage />} />
+        <Route path="/bookings" element={<MyBookings />} />
       </Routes>
       <ChatWidget />
     </Router>
@@ -192,6 +193,7 @@ function TemporalNav({ time, navigate }) {
           <NavLink text="ARCHIVES" time="10:00 AM" onClick={() => navigate('/archives')} />
           <NavLink text="WORKS" time="10:15 AM" onClick={() => navigate('/works')} />
           <NavLink text="DEMO" time={time.toLocaleTimeString('en-IN', { hour12: false, hour: '2-digit', minute: '2-digit' })} onClick={() => navigate('/demo')} />
+          <NavLink text="MY BOOKINGS" time="local" onClick={() => navigate('/bookings')} />
         </div>
 
         <div className="nav-right-group">
@@ -1873,6 +1875,7 @@ function DemoBookingFlow({ step, setStep }) {
                     results.push(booking)
                   }
                   setBookings(results)
+                  saveBookingsToHistory(results, selectedTrain, passenger)
                   setStep(5)
                 } catch (e) {
                   setError(e.message)
@@ -1883,7 +1886,15 @@ function DemoBookingFlow({ step, setStep }) {
             />
           )}
 
-          {step === 5 && <DemoStepSuccess bookings={bookings} onReset={reset} />}
+          {step === 5 && (
+            <DemoStepSuccess
+              bookings={bookings}
+              train={selectedTrain}
+              passenger={passenger}
+              date={searchParams.date}
+              onReset={reset}
+            />
+          )}
         </motion.div>
       </AnimatePresence>
     </div>
@@ -1892,6 +1903,31 @@ function DemoBookingFlow({ step, setStep }) {
 
 function capitalize(str) {
   return str.replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
+const BOOKINGS_STORAGE_KEY = 'tatkaleasy_bookings'
+
+function saveBookingsToHistory(bookings, train, passenger) {
+  try {
+    const existing = JSON.parse(localStorage.getItem(BOOKINGS_STORAGE_KEY) || '[]')
+    const enriched = bookings.map((b) => ({
+      ...b,
+      train_name: train?.train_name || b.train_name,
+      passenger_name: passenger?.name,
+      booked_at: new Date().toISOString(),
+    }))
+    localStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify([...enriched, ...existing]))
+  } catch (e) {
+    console.warn('Could not save booking history:', e)
+  }
+}
+
+function getBookingsHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(BOOKINGS_STORAGE_KEY) || '[]')
+  } catch (e) {
+    return []
+  }
 }
 
 const VOICE_LOCALES = {
@@ -2070,6 +2106,11 @@ function DemoStepSelect({ trains, onSelect, onBack }) {
               <div className="train-price">
                 <span className="price-amount">₹{train.price}</span>
                 <span className="seats-available">{train.available_seats}/{train.total_seats} seats</span>
+                {train.confirmation_probability != null && (
+                  <span className={`confirmation-pill conf-${train.confirmation_label?.toLowerCase().replace(' ', '-')}`}>
+                    {train.confirmation_probability}% · {train.confirmation_label}
+                  </span>
+                )}
               </div>
             </motion.div>
           ))}
@@ -2216,7 +2257,7 @@ function DemoStepConfirm({ train, date, selectedSeats, passenger, setPassenger, 
   )
 }
 
-function DemoStepSuccess({ bookings, onReset }) {
+function DemoStepSuccess({ bookings, train, passenger, date, onReset }) {
   return (
     <motion.div
       className="demo-step-panel success"
@@ -2244,7 +2285,20 @@ function DemoStepSuccess({ bookings, onReset }) {
         ))}
       </div>
       <p className="demo-hint">Generated live by the TatkalEasy backend — a real PNR per seat.</p>
+
+      {bookings.map((b) => (
+        <PrintableTicket key={b.pnr} booking={b} train={train} passenger={passenger} date={date} />
+      ))}
+
       <div className="success-actions">
+        <motion.button
+          className="brutalist-btn-ultimate secondary"
+          onClick={() => window.print()}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          DOWNLOAD / PRINT TICKET
+        </motion.button>
         <motion.button
           className="brutalist-btn-ultimate primary"
           onClick={onReset}
@@ -2255,6 +2309,34 @@ function DemoStepSuccess({ bookings, onReset }) {
         </motion.button>
       </div>
     </motion.div>
+  )
+}
+
+function PrintableTicket({ booking, train, passenger, date }) {
+  const qrData = encodeURIComponent(`PNR:${booking.pnr}|TRAIN:${booking.train_number}|SEAT:${booking.seat_number}`)
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}`
+
+  return (
+    <div className="printable-ticket">
+      <div className="ticket-header">
+        <span className="ticket-brand">TATKAL<span className="tm-symbol">™</span>easy</span>
+        <span className="ticket-mock-label">HACKATHON PROTOTYPE — NOT A REAL TICKET</span>
+      </div>
+      <div className="ticket-body">
+        <div className="ticket-details">
+          <div className="ticket-row"><span>PNR</span><strong>{booking.pnr}</strong></div>
+          <div className="ticket-row"><span>Train</span><strong>{booking.train_number} · {booking.train_name || train?.train_name}</strong></div>
+          <div className="ticket-row"><span>Passenger</span><strong>{passenger?.name || booking.passenger_name}</strong></div>
+          <div className="ticket-row"><span>Date</span><strong>{date ? new Date(date).toLocaleDateString() : '—'}</strong></div>
+          <div className="ticket-row"><span>Seat</span><strong>{booking.seat_number}</strong></div>
+          <div className="ticket-row"><span>Class</span><strong>{train?.travel_class || '—'}</strong></div>
+          <div className="ticket-row"><span>Route</span><strong>{booking.from_station} → {booking.to_station}</strong></div>
+          <div className="ticket-row"><span>Fare</span><strong>₹{booking.price}</strong></div>
+          <div className="ticket-row"><span>Status</span><strong>{booking.status}</strong></div>
+        </div>
+        <img src={qrUrl} alt={`QR code encoding PNR ${booking.pnr}`} className="ticket-qr" width="120" height="120" />
+      </div>
+    </div>
   )
 }
 
@@ -2360,6 +2442,7 @@ function LiveStatusWidget() {
           <div className="confirmation-row"><span>LOCATION:</span><span>{result.current_location}</span></div>
           <div className="confirmation-row"><span>DELAY:</span><span>{result.delay}</span></div>
           <div className="confirmation-row"><span>NEXT STOP:</span><span>{result.next_station} · ETA {result.eta}</span></div>
+          <JourneyProgressMap stations={result.stations} />
           <div className="live-stations-list">
             {result.stations.map((s, i) => (
               <div key={i} className={`live-station-row ${s.status.toLowerCase()}`}>
@@ -2371,6 +2454,34 @@ function LiveStatusWidget() {
           </div>
         </motion.div>
       )}
+    </div>
+  )
+}
+
+function JourneyProgressMap({ stations }) {
+  const currentIndex = stations.findIndex((s) => s.status === 'Current')
+  const progressPercent = currentIndex >= 0 ? (currentIndex / (stations.length - 1)) * 100 : 0
+
+  return (
+    <div className="journey-map" role="img" aria-label={`Journey progress: currently at ${stations[currentIndex]?.name || 'unknown station'}`}>
+      <div className="journey-map-track">
+        <motion.div
+          className="journey-map-fill"
+          initial={{ width: 0 }}
+          animate={{ width: `${progressPercent}%` }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        />
+        {stations.map((s, i) => (
+          <div
+            key={i}
+            className={`journey-map-node ${s.status.toLowerCase()}`}
+            style={{ left: `${(i / (stations.length - 1)) * 100}%` }}
+          >
+            <span className="journey-map-dot" />
+            <span className="journey-map-label">{s.name}</span>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -2748,6 +2859,78 @@ function WorksGallery() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <UltimateFooter />
+    </div>
+  )
+}
+
+// ============================================================================
+// MY BOOKINGS — session history, since this prototype has no real login.
+// Stored in this browser's localStorage only; clearing site data clears it.
+// ============================================================================
+
+function MyBookings() {
+  const navigate = useNavigate()
+  const [bookings, setBookings] = useState([])
+
+  useEffect(() => {
+    setBookings(getBookingsHistory())
+  }, [])
+
+  const clearHistory = () => {
+    localStorage.removeItem(BOOKINGS_STORAGE_KEY)
+    setBookings([])
+  }
+
+  return (
+    <div className="ultimate-page" id="main-content">
+      <TemporalNav time={new Date()} navigate={navigate} />
+
+      <section className="works-gallery-section">
+        <div className="container-ultimate">
+          <div className="works-header">
+            <h1 className="works-page-title">MY BOOKINGS</h1>
+            <p className="works-page-subtitle">
+              Tickets booked in this browser this session — stored locally, not on a server.
+              <br />
+              This prototype has no real login, so there's no account to sync across devices.
+            </p>
+          </div>
+
+          {bookings.length === 0 ? (
+            <p className="demo-hint" style={{ textAlign: 'center' }}>
+              No bookings yet. <button className="link-button" onClick={() => navigate('/demo')}>Book one on the demo →</button>
+            </p>
+          ) : (
+            <>
+              <div className="works-full-list">
+                {bookings.map((b, i) => (
+                  <motion.div
+                    key={`${b.pnr}-${i}`}
+                    className="works-list-item"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                  >
+                    <span className="works-category">{b.status}</span>
+                    <span className="works-title">{b.train_name} · Seat {b.seat_number} · PNR {b.pnr}</span>
+                    <span className="works-year">{new Date(b.booked_at).toLocaleDateString()}</span>
+                  </motion.div>
+                ))}
+              </div>
+              <motion.button
+                className="brutalist-btn-ultimate secondary"
+                onClick={clearHistory}
+                whileHover={{ scale: 1.05 }}
+                style={{ marginTop: 'var(--space-8)' }}
+              >
+                CLEAR LOCAL HISTORY
+              </motion.button>
+            </>
+          )}
         </div>
       </section>
 

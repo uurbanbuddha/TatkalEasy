@@ -88,6 +88,8 @@ class Train(BaseModel):
     travel_class: str
     badge: Optional[str] = None
     distance_km: Optional[int] = None
+    confirmation_probability: Optional[int] = None
+    confirmation_label: Optional[str] = None
 
 class BookingRequest(BaseModel):
     train_number: str
@@ -249,6 +251,25 @@ def get_distance_km(from_station: str, to_station: str) -> int:
         return STATION_DISTANCES_KM[reverse_key]
     return 800  # reasonable default for an unmapped station pair
 
+def compute_confirmation(available_seats: int, total_seats: int) -> tuple:
+    """
+    Heuristic confirmation-probability estimate, in the spirit of the
+    "will my waitlisted/RAC ticket confirm" prediction category-standard
+    apps in this space offer. Based purely on the available/total seat
+    ratio in this mock inventory — explicitly an estimate, not a real
+    prediction model trained on historical PNR data.
+    """
+    if total_seats <= 0:
+        return 50, "Moderate"
+    ratio = available_seats / total_seats
+    if ratio >= 0.4:
+        return min(97, round(85 + ratio * 20)), "Very High"
+    if ratio >= 0.15:
+        return round(55 + ratio * 80), "High"
+    if ratio > 0:
+        return round(20 + ratio * 100), "Moderate"
+    return 8, "Low"
+
 # Routes
 @app.get("/")
 async def root():
@@ -277,9 +298,14 @@ async def search_trains(request: SearchRequest):
 
     if not results:
         # Return all trains as fallback for demo
-        return MOCK_TRAINS[:3]
+        results = MOCK_TRAINS[:3]
 
-    return results
+    enriched = []
+    for train in results:
+        prob, label = compute_confirmation(train["available_seats"], train["total_seats"])
+        enriched.append({**train, "confirmation_probability": prob, "confirmation_label": label})
+
+    return enriched
 
 @app.post("/api/book", response_model=BookingResponse)
 async def book_ticket(request: BookingRequest):
@@ -587,11 +613,16 @@ async def get_trains_between(from_station: str, to_station: str):
     if not trains:
         trains = MOCK_TRAINS[:3]  # Demo fallback
 
+    enriched = []
+    for train in trains:
+        prob, label = compute_confirmation(train["available_seats"], train["total_seats"])
+        enriched.append({**train, "confirmation_probability": prob, "confirmation_label": label})
+
     return {
         "from_station": from_station,
         "to_station": to_station,
-        "total_trains": len(trains),
-        "trains": trains
+        "total_trains": len(enriched),
+        "trains": enriched
     }
 
 @app.get("/api/coach-position/{train_number}")

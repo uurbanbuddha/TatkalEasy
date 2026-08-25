@@ -639,6 +639,217 @@ button:focus-visible {
   }
 }
 
+.link-button {
+  background: none;
+  border: none;
+  color: var(--railway-navy);
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+/* ============================================================================
+   PRINTABLE TICKET
+   ============================================================================ */
+
+.printable-ticket {
+  max-width: 500px;
+  margin: var(--space-8) auto;
+  border: 3px solid var(--railway-navy);
+  background: #FFFFFF;
+  text-align: left;
+}
+
+.ticket-header {
+  background: var(--railway-navy);
+  color: #FFFFFF;
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.ticket-brand {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: var(--text-lg);
+  text-transform: lowercase;
+}
+
+.ticket-mock-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--hazard-yellow);
+}
+
+.ticket-body {
+  padding: var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-6);
+  align-items: flex-start;
+}
+
+.ticket-details {
+  flex: 1;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.ticket-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px dashed var(--grey-200);
+}
+
+.ticket-row span {
+  color: var(--grey-500);
+  text-transform: uppercase;
+  font-size: var(--text-xs);
+}
+
+.ticket-qr {
+  border: 1px solid var(--grey-200);
+  border-radius: var(--radius);
+  flex-shrink: 0;
+}
+
+/* Print: show only the ticket, hide everything else on the page */
+@media print {
+  .temporal-nav, .tricolor-strip, .cursor-outer, .cursor-inner,
+  .chat-widget, .saved-counter, .demo-steps-bar, .demo-error-banner,
+  .success-actions, .ultimate-footer, .demo-header, .disclosure-banner,
+  .success-icon, h2, .pnr-list, .demo-hint {
+    display: none !important;
+  }
+
+  .printable-ticket {
+    margin: 0;
+    border-width: 2px;
+    box-shadow: none;
+  }
+}
+
+/* ============================================================================
+   JOURNEY PROGRESS MAP (visual upgrade to the live-status station list)
+   ============================================================================ */
+
+.journey-map {
+  margin: var(--space-8) var(--space-4) var(--space-16);
+  padding-top: var(--space-4);
+}
+
+.journey-map-track {
+  position: relative;
+  height: 4px;
+  background: var(--grey-200);
+  border-radius: var(--radius-full);
+  margin: 0 var(--space-4);
+}
+
+.journey-map-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--railway-navy);
+  border-radius: var(--radius-full);
+}
+
+.journey-map-node {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.journey-map-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--grey-300);
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 0 1px var(--grey-300);
+}
+
+.journey-map-node.departed .journey-map-dot {
+  background: var(--railway-navy);
+  box-shadow: 0 0 0 1px var(--railway-navy);
+}
+
+.journey-map-node.current .journey-map-dot {
+  background: var(--hazard-yellow);
+  box-shadow: 0 0 0 1px var(--hazard-yellow);
+  animation: pulse-listening 1.2s ease-in-out infinite;
+  width: 18px;
+  height: 18px;
+}
+
+.journey-map-label {
+  position: absolute;
+  top: 20px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  color: var(--grey-500);
+  transform: rotate(0deg);
+}
+
+.journey-map-node.current .journey-map-label {
+  color: var(--railway-navy);
+  font-weight: 700;
+}
+
+@media (max-width: 480px) {
+  .journey-map-label {
+    font-size: 8px;
+  }
+}
+
+/* ============================================================================
+   CONFIRMATION PROBABILITY PILL
+   ============================================================================ */
+
+.confirmation-pill {
+  display: block;
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  text-align: center;
+}
+
+.conf-very-high {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.conf-high {
+  background: #FEF9C3;
+  color: #854D0E;
+}
+
+.conf-moderate {
+  background: #FFEDD5;
+  color: #9A3412;
+}
+
+.conf-low {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
 /* ============================================================================
    VOICE SEARCH
    ============================================================================ */
